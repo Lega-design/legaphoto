@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Supabaseの接続情報（一時的に直接指定）
-URL = "https://ikwoqawdbdvotjygybtks.supabase.co"
+URL = "https://ikwoqawdbdvotjygbtks.supabase.co"
 KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlrd29xYXdkYmR2b3RqeWdidGtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzOTkxNTYsImV4cCI6MjA5Mzk3NTE1Nn0.4EOjmaf5UPQ4iJ0t9G87T74SYB3wl1SLe1B-QqybV6A"
 
 def get_supabase() -> Client:
