@@ -114,7 +114,7 @@ PREFECTURES = [
 # 保護対象の地域
 PROTECTED_PREFS = ["静岡県"]
 # テスト用のパスワード
-PROTECT_PASSWORD = "lega"
+PROTECT_PASSWORD = "LegacyBP5"
 
 # --- Navigation ---
 page = st.sidebar.radio("メニュー", ["ホーム（募集一覧）", "新規投稿"])
@@ -195,7 +195,7 @@ if page == "ホーム（募集一覧）":
                     is_protected = pref in PROTECTED_PREFS
                     if is_protected:
                         with st.expander("🔐 連絡先を表示する（パスワードが必要）"):
-                            pwd_input = st.text_input(f"パスワードを入力してください ({post_id[:4]})", type="password", key=f"pwd_{post_id}")
+                            pwd_input = st.text_input("パスワードを入力してください", type="password", key=f"pwd_{post_id}")
                             if pwd_input == PROTECT_PASSWORD:
                                 st.markdown(f"""
                                 <a class="x-link-button" href="https://x.com/{x_acc}" target="_blank">
