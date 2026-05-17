@@ -90,6 +90,48 @@ st.markdown("""
         background-color: #333333;
     }
 
+    .youtube-link-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #FF0000;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: bold;
+        margin-top: 15px;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+    }
+    
+    .youtube-link-button:hover {
+        background-color: #cc0000;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+    }
+    
+    .x-link-button {
+        transition: all 0.3s ease;
+    }
+    
+    .x-link-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-card {
+        padding: 40px;
+        border-radius: 15px;
+        background-color: white;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        margin-bottom: 25px;
+        border-top: 4px solid #1DA1F2;
+        transition: transform 0.2s ease;
+    }
+    
+    .profile-card:hover {
+        transform: scale(1.01);
+    }
+
     .sidebar-info {
         padding: 15px;
         background-color: #fff9c4;
@@ -125,7 +167,7 @@ PROTECT_PASSWORD = get_protected_password()
 
 
 # --- Navigation ---
-page = st.sidebar.radio("メニュー", ["ホーム（募集一覧）", "新規投稿"])
+page = st.sidebar.radio("メニュー", ["ホーム", "募集一覧", "新規投稿"])
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
@@ -139,18 +181,48 @@ st.sidebar.markdown("""
 
 # --- Page Logic ---
 
-if page == "ホーム（募集一覧）":
+if page == "ホーム":
     st.markdown("""
     <div class="hero-section">
-        <h1 style="color: #1DA1F2; margin-bottom: 10px;">📸 LegaPhoto</h1>
+        <h1 style="color: #1DA1F2; margin-bottom: 10px;">📸 LegaPhoto ホーム</h1>
         <p style="color: #666; font-size: 1.2em;">カメラマンとモデルの新しい出会いを、もっと身近に。</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Search / Filter Sidebar
+    st.markdown("""
+    <div class="profile-card">
+        <h2 style="margin-bottom: 20px; color: #333; text-align: center;">👤 Lega (レガ) の紹介</h2>
+        <p style="color: #555; line-height: 1.8; text-align: left; margin-bottom: 30px; font-size: 1.05em;">
+            LegaPhoto（レガフォト）を運営している <b>Lega (レガ)</b> です！<br><br>
+            主にカメラマン・ビデオグラファーとして、ポートレート撮影や映像制作を行っています。<br>
+            当マッチングサイト「LegaPhoto」を通じて、カメラマンとモデルの皆様が安心・安全に、そして素敵なコラボレーションができる出会いの場を提供しています。
+        </p>
+        
+        <h3 style="border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; text-align: left; color: #444; margin-bottom: 20px;">🔗 公式リンク</h3>
+        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 25px;">
+            <a class="x-link-button" href="https://x.com/LegaPhoto" target="_blank" style="margin: 0; display: inline-flex; align-items: center; gap: 8px;">
+                𝕏 @LegaPhoto
+            </a>
+            <a class="youtube-link-button" href="https://www.youtube.com/@LegaPhoto/videos" target="_blank" style="margin: 0; display: inline-flex; align-items: center; gap: 8px;">
+                📺 YouTube チャンネル
+            </a>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+elif page == "募集一覧":
+    st.markdown("""
+    <div class="hero-section">
+        <h1 style="color: #1DA1F2; margin-bottom: 10px;">📸 LegaPhoto 募集一覧</h1>
+        <p style="color: #666; font-size: 1.2em;">カメラマンとモデルの新しい出会いを、もっと身近に。</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Search / Filter Sidebar (募集一覧画面でのみ表示)
     st.sidebar.subheader("🔍 絞り込み検索")
     search_pref = st.sidebar.selectbox("地域", ["すべて"] + PREFECTURES)
     search_costume = st.sidebar.selectbox("衣装", ["すべて", "私服", "制服", "コスプレ"])
+
     
     # DBからデータ取得
     try:
