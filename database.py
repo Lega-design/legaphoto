@@ -55,3 +55,24 @@ def fetch_setting(key: str) -> str:
         pass
     return None
 
+def increment_page_view() -> int:
+    """DBのsettingsテーブルにある閲覧カウンターをインクリメントし、最新のカウント数を返します。"""
+    try:
+        supabase = get_supabase()
+        # 現在のカウントを取得
+        response = supabase.table("settings").select("value").eq("key", "page_views").maybe_single().execute()
+        
+        current_count = 0
+        if response and response.data:
+            current_count = int(response.data.get("value", 0))
+            
+        new_count = current_count + 1
+        
+        # 新しいカウントを保存（upsert）
+        supabase.table("settings").upsert({"key": "page_views", "value": str(new_count)}).execute()
+        return new_count
+    except Exception:
+        pass
+    return None
+
+
