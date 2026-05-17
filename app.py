@@ -217,7 +217,6 @@ elif page == "新規投稿":
     st.info("詳細な情報を入力して、素敵なマッチングを見つけましょう！")
     
     with st.form("post_form", clear_on_submit=True):
-        st.subheader("必須項目 📝")
         
         col_name, col_x = st.columns(2)
         with col_name:
@@ -240,7 +239,6 @@ elif page == "新規投稿":
         detail = st.text_area("詳細・条件など :red[（必須）]", placeholder="例：相互無償でお願いします。交通費は自己負担で...")
         
         st.markdown("---")
-        st.subheader("任意項目 💡")
         
         nearest_station = st.text_input("最寄り駅（任意）", placeholder="例：沼津駅、新宿駅")
         
