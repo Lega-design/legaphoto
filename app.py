@@ -217,28 +217,40 @@ elif page == "新規投稿":
     st.info("詳細な情報を入力して、素敵なマッチングを見つけましょう！")
     
     with st.form("post_form", clear_on_submit=True):
+        st.subheader("必須項目 📝")
+        
         col_name, col_x = st.columns(2)
         with col_name:
-            username = st.text_input("お名前（表示名）", placeholder="例：Lega")
+            username = st.text_input("お名前 :red[（必須）]", placeholder="例：Lega")
         with col_x:
-            x_account = st.text_input("X username (連絡先)", help="＠は不要です")
+            x_account = st.text_input("X username (連絡先) :red[（必須）]", help="＠は不要です")
 
-        col1, col2 = st.columns(2)
-        with col1:
-            shoot_date = st.date_input("撮影希望日")
-            prefecture = st.selectbox("地域", PREFECTURES)
-            nearest_station = st.text_input("最寄り駅（任意）", placeholder="例：浜松駅、渋谷駅")
-        with col2:
-            place = st.text_input("具体的な場所", placeholder="例：浜松城公園、都内スタジオ")
-            costume = st.selectbox("衣装", ["私服", "制服", "コスプレ"])
-            
-            t_col1, t_col2 = st.columns(2)
-            with t_col1:
-                start_time = st.time_input("開始時間（任意）", value=None)
-            with t_col2:
-                end_time = st.time_input("終了時間（任意）", value=None)
+        col_date, col_place = st.columns(2)
+        with col_date:
+            shoot_date = st.date_input("撮影希望日 :red[（必須）]")
+        with col_place:
+            place = st.text_input("具体的な場所 :red[（必須）]", placeholder="例：沼津港、都内スタジオ")
+
+        col_pref, col_costume = st.columns(2)
+        with col_pref:
+            prefecture = st.selectbox("地域 :red[（必須）]", PREFECTURES)
+        with col_costume:
+            costume = st.selectbox("衣装 :red[（必須）]", ["私服", "制服", "コスプレ"])
         
-        detail = st.text_area("詳細・条件など", placeholder="例：相互無償でお願いします。交通費は自己負担で...")
+        detail = st.text_area("詳細・条件など :red[（必須）]", placeholder="例：相互無償でお願いします。交通費は自己負担で...")
+        
+        st.markdown("---")
+        st.subheader("任意項目 💡")
+        
+        nearest_station = st.text_input("最寄り駅（任意）", placeholder="例：沼津駅、新宿駅")
+        
+        col_time1, col_time2 = st.columns(2)
+        with col_time1:
+            start_time = st.time_input("開始時間（任意）", value=None)
+        with col_time2:
+            end_time = st.time_input("終了時間（任意）", value=None)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
         submit = st.form_submit_button("募集を投稿する")
         
         if submit:
