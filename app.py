@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from database import fetch_posts, create_post
+from database import fetch_posts, create_post, fetch_setting
+
 
 # --- Page Config ---
 st.set_page_config(
@@ -113,8 +114,15 @@ PREFECTURES = [
 
 # 保護対象の地域
 PROTECTED_PREFS = ["静岡県"]
-# テスト用のパスワード
-PROTECT_PASSWORD = "LegacyBP5"
+
+# DBから安全にパスワード（認証キー）を取得（キャッシュを利用して高パフォーマンスを維持）
+@st.cache_data(ttl=300)  # 5分間キャッシュしてデータベース負荷を軽減
+def get_protected_password() -> str:
+    db_password = fetch_setting("protect_password")
+    return db_password if db_password else "LegacyBP5"
+
+PROTECT_PASSWORD = get_protected_password()
+
 
 # --- Navigation ---
 page = st.sidebar.radio("メニュー", ["ホーム（募集一覧）", "新規投稿"])

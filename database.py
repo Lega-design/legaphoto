@@ -6,9 +6,15 @@ from dotenv import load_dotenv
 # .envファイルから環境変数を読み込む（ローカル開発用）
 load_dotenv()
 
-# Supabaseの接続情報（直接指定）
-URL = "https://ikwoqawdbdvotjygbtks.supabase.co"
-KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlrd29xYXdkYmR2b3RqeWdidGtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzOTkxNTYsImV4cCI6MjA5Mzk3NTE1Nn0.4EOjmaf5UPQ4iJ0t9G87T74SYB3wl1SLe1B-QqybV6A"
+# Supabaseの接続情報（環境変数またはStreamlit Secretsから安全に取得）
+try:
+    # Streamlit環境下でのキー取得
+    URL = st.secrets.get("SUPABASE_URL") or os.environ.get("SUPABASE_URL")
+    KEY = st.secrets.get("SUPABASE_KEY") or os.environ.get("SUPABASE_KEY")
+except Exception:
+    # st.secretsが利用できない一般のPythonスクリプト実行時などのフォールバック
+    URL = os.environ.get("SUPABASE_URL")
+    KEY = os.environ.get("SUPABASE_KEY")
 
 def get_supabase() -> Client:
     """Supabaseクライアントを初期化して返します。"""
@@ -35,3 +41,17 @@ def create_post(data):
     supabase = get_supabase()
     response = supabase.table("posts").insert(data).execute()
     return response.data
+
+def fetch_setting(key: str) -> str:
+    """DBのsettingsテーブルから指定された設定値（パスワードなど）を取得します。"""
+    try:
+        supabase = get_supabase()
+        # maybe_single() を使うことで、データが存在しない場合もエラーにならずに安全に取得できます
+        response = supabase.table("settings").select("value").eq("key", key).maybe_single().execute()
+        if response and response.data:
+            return response.data.get("value")
+    except Exception:
+        # テーブル未作成時やDBエラー時のセーフティネット
+        pass
+    return None
+
