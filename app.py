@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from database import fetch_posts, create_post, fetch_setting
+from database import fetch_posts, create_post, fetch_setting, increment_page_view
+
 
 
 # --- Page Config ---
@@ -165,6 +166,11 @@ def get_protected_password() -> str:
 
 PROTECT_PASSWORD = get_protected_password()
 
+# --- Page View Counter (セッションごとに1回インクリメント) ---
+if "page_view_counted" not in st.session_state:
+    st.session_state["page_view_counted"] = True
+    st.session_state["page_views"] = increment_page_view()
+
 
 # --- Navigation ---
 page = st.sidebar.radio("メニュー", ["ホーム", "募集一覧", "新規投稿"])
@@ -183,40 +189,50 @@ st.sidebar.markdown("""
 
 if page == "ホーム":
     st.markdown("""
-    <div class="hero-section">
-        <h1 style="color: #1DA1F2; margin-bottom: 10px;">📸 LegaPhoto ホーム</h1>
-        <p style="color: #666; font-size: 1.2em;">カメラマンとモデルの新しい出会いを、もっと身近に。</p>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="hero-section">
+    <h1 style="color: #1DA1F2; margin-bottom: 10px;">📸 LegaPhoto ホーム</h1>
+    <p style="color: #666; font-size: 1.2em;">カメラマンとモデルの新しい出会いを、もっと身近に。</p>
+</div>
+""", unsafe_allow_html=True)
     
-    st.markdown("""
-    <div class="profile-card">
-        <h2 style="margin-bottom: 20px; color: #333; text-align: center;">👤 Lega (レガ) の紹介</h2>
-        <p style="color: #555; line-height: 1.8; text-align: left; margin-bottom: 30px; font-size: 1.05em;">
-            LegaPhoto（レガフォト）を運営している <b>Lega (レガ)</b> です！<br><br>
-            主にカメラマン・ビデオグラファーとして、ポートレート撮影や映像制作を行っています。<br>
-            当マッチングサイト「LegaPhoto」を通じて、カメラマンとモデルの皆様が安心・安全に、そして素敵なコラボレーションができる出会いの場を提供しています。
-        </p>
-        
-        <h3 style="border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; text-align: left; color: #444; margin-bottom: 20px;">🔗 公式リンク</h3>
-        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 25px;">
-            <a class="x-link-button" href="https://x.com/LegaPhoto" target="_blank" style="margin: 0; display: inline-flex; align-items: center; gap: 8px;">
-                𝕏 @LegaPhoto
-            </a>
-            <a class="youtube-link-button" href="https://www.youtube.com/@LegaPhoto/videos" target="_blank" style="margin: 0; display: inline-flex; align-items: center; gap: 8px;">
-                📺 YouTube チャンネル
-            </a>
+    # カウンター表示用HTMLの組み立て
+    views = st.session_state.get("page_views")
+    views_html = ""
+    if views is not None:
+        views_html = f"""
+        <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 30px 0 15px 0;">
+        <div style="text-align: center; color: #888; font-size: 0.85em;">
+            👀 累計アクセス数: <b style="color: #1DA1F2; font-size: 1.15em;">{views:,}</b> 回
         </div>
+        """
+    
+    st.markdown(f"""
+<div class="profile-card">
+    <h2 style="margin-bottom: 20px; color: #333; text-align: center;">👤 Lega (レガ) の紹介</h2>
+    <p style="color: #555; line-height: 1.8; text-align: center; margin-bottom: 30px; font-size: 1.05em;">
+        LegaPhoto（レガフォト）を運営している <b>Lega (レガ)</b> です！
+    </p>
+    
+    <h3 style="border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; text-align: left; color: #444; margin-bottom: 20px;">🔗 公式リンク</h3>
+    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 25px;">
+        <a class="x-link-button" href="https://x.com/LegaPhoto" target="_blank" style="margin: 0; display: inline-flex; align-items: center; gap: 8px;">
+            𝕏 @LegaPhoto
+        </a>
+        <a class="youtube-link-button" href="https://www.youtube.com/@LegaPhoto/videos" target="_blank" style="margin: 0; display: inline-flex; align-items: center; gap: 8px;">
+            📺 YouTube チャンネル
+        </a>
     </div>
-    """, unsafe_allow_html=True)
+    {views_html}
+</div>
+""", unsafe_allow_html=True)
 
 elif page == "募集一覧":
     st.markdown("""
-    <div class="hero-section">
-        <h1 style="color: #1DA1F2; margin-bottom: 10px;">📸 LegaPhoto 募集一覧</h1>
-        <p style="color: #666; font-size: 1.2em;">カメラマンとモデルの新しい出会いを、もっと身近に。</p>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="hero-section">
+    <h1 style="color: #1DA1F2; margin-bottom: 10px;">📸 LegaPhoto 募集一覧</h1>
+    <p style="color: #666; font-size: 1.2em;">カメラマンとモデルの新しい出会いを、もっと身近に。</p>
+</div>
+""", unsafe_allow_html=True)
     
     # Search / Filter Sidebar (募集一覧画面でのみ表示)
     st.sidebar.subheader("🔍 絞り込み検索")
