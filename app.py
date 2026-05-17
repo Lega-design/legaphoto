@@ -200,11 +200,11 @@ if page == "ホーム":
     views_html = ""
     if views is not None:
         views_html = f"""
-        <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 30px 0 15px 0;">
-        <div style="text-align: center; color: #888; font-size: 0.85em;">
-            👀 累計アクセス数: <b style="color: #1DA1F2; font-size: 1.15em;">{views:,}</b> 回
-        </div>
-        """
+<hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 30px 0 15px 0;">
+<div style="text-align: center; color: #888; font-size: 0.85em;">
+    👀 累計アクセス数: <b style="color: #1DA1F2; font-size: 1.15em;">{views:,}</b> 回
+</div>
+"""
     
     st.markdown(f"""
 <div class="profile-card">
@@ -212,7 +212,6 @@ if page == "ホーム":
     <p style="color: #555; line-height: 1.8; text-align: center; margin-bottom: 30px; font-size: 1.05em;">
         LegaPhoto（レガフォト）を運営している <b>Lega (レガ)</b> です！
     </p>
-    
     <h3 style="border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; text-align: left; color: #444; margin-bottom: 20px;">🔗 公式リンク</h3>
     <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 25px;">
         <a class="x-link-button" href="https://x.com/LegaPhoto" target="_blank" style="margin: 0; display: inline-flex; align-items: center; gap: 8px;">
